@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrabbleLive - Lobby</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <h1 class="brand">ScrabbleLive</h1>
+
+    <div class="card lobby-card">
+      <label>Username</label>
+      <input id="username" placeholder="Enter your name" />
+
+      <label style="margin-top:14px;">Room Code (optional)</label>
+      <input id="roomCode" placeholder="AB12" />
+
+      <div class="row">
+        <button id="startBtn">Start Game</button>
+      </div>
+
+      <p class="hint">Frontend-only demo: this just opens the game UI.</p>
+      <p id="msg" class="msg"></p>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    $("startBtn").onclick = () => {
+      const username = $("username").value.trim();
+      const roomCode = $("roomCode").value.trim().toUpperCase() || "AB12";
+      $("msg").textContent = "";
+
+      if (!username) {
+        $("msg").textContent = "Please enter your username.";
+        return;
+      }
+
+      localStorage.setItem("scrabble_user", username);
+      localStorage.setItem("scrabble_room", roomCode);
+      window.location.href = "game.html";
+    };
+  </script>
+</body>
+</html>
