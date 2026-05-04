@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrabbleLive - Game</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="top-left">
+      Room: <span id="roomLabel"></span> |
+      You: <span id="userLabel"></span>
+    </div>
+    <div id="turnLabel" class="pill">Frontend Demo</div>
+  </div>
+
+  <div class="game-layout">
+    <div class="board-wrap">
+      <div class="board">
+        <div id="board" class="board-grid"></div>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <h3>Scores (UI)</h3>
+        <div class="score-row"><span>You</span><span id="myScore">0</span></div>
+        <div class="score-row"><span>Opponent</span><span id="opScore">0</span></div>
+        <p class="hint">Scoring not calculated (frontend-only).</p>
+      </div>
+
+      <div class="card">
+        <h3>Actions</h3>
+        <div class="btn-grid">
+          <button id="submitBtn">Submit</button>
+          <button id="undoBtn">Undo</button>
+          <button id="shuffleBtn">Shuffle</button>
+          <button id="passBtn">Pass</button>
+          <button id="swapBtn">Swap</button>
+        </div>
+        <p id="gameMsg" class="msg"></p>
+      </div>
+
+      <div class="card chat">
+        <h3>Chat (Local UI)</h3>
+        <div id="chatBox" class="chat-box"></div>
+        <div class="row">
+          <input id="chatInput" placeholder="Type message..." />
+          <button id="sendChatBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rack-wrap">
+    <h3>Your Tiles</h3>
+    <div id="rack" class="rack"></div>
+    <p class="hint">Click a tile, then click a board square to place it.</p>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
