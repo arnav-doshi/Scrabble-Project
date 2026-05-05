@@ -58,6 +58,25 @@
     <p class="hint">Click a tile, then click a board square to place it.</p>
   </div>
 
-  <script src="game.js"></script>
+  <!-- End-of-game overlay -->
+  <div id="endGameOverlay" class="endgame-overlay" style="display:none;">
+    <div class="endgame-card">
+      <h2 id="endTitle">Game Over</h2>
+      <div id="finalWinner" class="end-winner"></div>
+      <div id="finalScores" class="final-scores"></div>
+      <div style="margin-top:12px; text-align:center;">
+        <button id="closeEndBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Socket.io Client Library -->
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  
+  <!-- Socket Service -->
+  <script src="socketService.js"></script>
+  
+  <!-- Game Logic with Socket.io -->
+  <script src="game-socketio.js"></script>
 </body>
 </html>

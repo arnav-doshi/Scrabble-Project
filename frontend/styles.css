@@ -235,3 +235,26 @@ button{
   background:#fafafa;
 }
 .chat .row input{ flex:1; }
+
+/* End-of-game overlay */
+.endgame-overlay{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.endgame-card{
+  background:#fff;
+  padding:20px 22px;
+  border-radius:12px;
+  width:320px;
+  text-align:center;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+.end-winner{ font-size:18px; font-weight:800; margin-top:6px; }
+.final-scores{ margin-top:12px; text-align:left; }
+.final-scores .row{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #eee; }
+.final-scores .row:last-child{ border-bottom: none; }
