@@ -21,6 +21,10 @@
         <button id="joinBtn">Join Game</button>
       </div>
 
+      <div class="row" style="margin-top:10px;">
+        <button id="leaderboardBtn" class="secondary-btn" style="width:100%;">Show Leaderboard</button>
+      </div>
+
       <p class="hint">Create a new game or join an existing one with a room code.</p>
       <p id="msg" class="msg"></p>
     </div>
@@ -98,6 +102,10 @@
         $("msg").textContent = "Error joining game: " + (error.message || 'Server error');
         $("joinBtn").disabled = false;
       }
+    };
+
+    $("leaderboardBtn").onclick = () => {
+      window.location.href = "leaderboard.html";
     };
   </script>
 </body>

@@ -24,6 +24,7 @@ let board = Array.from({ length: 15 }, () => Array.from({ length: 15 }, () => nu
 let placedThisTurn = []; // {row, col, tile}
 let rack = [];
 let isMyTurn = false;
+let gameEnded = false;
 
 // Bonus squares configuration
 const BONUS = {};
@@ -134,6 +135,19 @@ function setMsg(text){
   document.getElementById("gameMsg").textContent = text;
 }
 
+function handleGameEnded(data) {
+  if (gameEnded) return;
+  gameEnded = true;
+
+  if (data?.game) {
+    currentGame = data.game;
+  }
+
+  sessionStorage.setItem('scrabble_ended_game', JSON.stringify(data?.game || currentGame || {}));
+  sessionStorage.setItem('scrabble_end_reason', data?.reason || 'finished');
+  window.location.href = 'leaderboard.html';
+}
+
 function updateTurnLabel() {
   const label = document.getElementById("turnLabel");
   if (isMyTurn) {
@@ -211,8 +225,13 @@ function setupSocketListeners() {
 
     // If game finished or abandoned, show final scoreboard overlay
     if (currentGame.status === 'finished' || currentGame.status === 'abandoned' || currentGame.winner) {
-      showEndGameOverlay(currentGame);
+      handleGameEnded(data);
     }
+  });
+
+  socketService.onGameEnded((data) => {
+    console.log('Game ended:', data);
+    handleGameEnded(data);
   });
 
   // Rack updated
@@ -295,6 +314,13 @@ document.getElementById("swapBtn").onclick = () => {
   setMsg("Swapping tile...");
   socketService.swapTiles(gameId, [selectedTileId]);
   selectedTileId = null;
+};
+
+document.getElementById("endGameBtn").onclick = () => {
+  if (gameEnded) return;
+
+  setMsg("Ending game...");
+  socketService.endGame(gameId, 'manual');
 };
 
 document.getElementById("submitBtn").onclick = () => {

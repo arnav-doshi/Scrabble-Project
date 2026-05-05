@@ -7,6 +7,10 @@ class SocketService {
     this.serverUrl = 'http://localhost:3000'; // Configure for production
   }
 
+  getServerUrl() {
+    return this.serverUrl;
+  }
+
   connect() {
     if (this.socket) return;
     
@@ -93,6 +97,23 @@ class SocketService {
     this.socket.emit('swap-tiles', { gameId, tileIds });
   }
 
+  // END GAME
+  endGame(gameId, reason = 'manual') {
+    return new Promise((resolve, reject) => {
+      if (!this.socket) return reject(new Error('Not connected'));
+
+      this.socket.emit('end-game', { gameId, reason }, (response) => {
+        if (!response) return resolve(null);
+        if (response.success) return resolve(response.game);
+        return reject(new Error(response.message || 'Unable to end game'));
+      });
+
+      this.socket.once('error', (error) => {
+        reject(error || new Error('Socket error'));
+      });
+    });
+  }
+
   // SEND CHAT
   sendChat(gameId, message) {
     this.socket.emit('chat-message', { gameId, message });
@@ -132,6 +153,20 @@ class SocketService {
 
   onGameStarted(callback) {
     this.socket.on('game-started', callback);
+  }
+
+  onGameEnded(callback) {
+    this.socket.on('game-ended', callback);
+  }
+
+  async fetchLeaderboard(range = 'week') {
+    const response = await fetch(`${this.serverUrl}/leaderboard?range=${encodeURIComponent(range)}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to load leaderboard (${response.status})`);
+    }
+
+    return response.json();
   }
 
   // Remove listener
