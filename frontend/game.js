@@ -9,13 +9,13 @@ document.getElementById("userLabel").textContent = user;
 
 let selectedTileId = null;
 
-// Board model: 15x15, each cell is null or {letter, points, id}
+// Board models: 15x15, each cell is  going  to null or letter, points, and  id
 const board = Array.from({ length: 15 }, () => Array.from({ length: 15 }, () => null));
 
 // Track tiles placed this turn (Undo / Submit UI)
-let placedThisTurn = []; // {row,col,tile}
+let placedThisTurn = []; // row,col,tile
 
-// --- Real Scrabble bonus layout ---
+//  Real Scrabble bonus layout
 const BONUS = {};
 function setBonus(r,c,type){ BONUS[`${r},${c}`]=type; }
 
@@ -56,7 +56,7 @@ function setBonus(r,c,type){ BONUS[`${r},${c}`]=type; }
  [14,3],[14,11]
 ].forEach(([r,c]) => setBonus(r,c,"DL"));
 
-// Simple points (enough for UI demo)
+// Simple points ( for UI demo)
 const POINTS = {
   A:1, E:1, I:1, O:1, U:1, L:1, N:1, S:1, T:1, R:1,
   D:2, G:2,
@@ -67,7 +67,7 @@ const POINTS = {
   Q:10, Z:10
 };
 
-// Initial rack (you can change letters)
+// Initial rack (I can change letters)
 let rack = ["A","T","E","R","S","L","O"].map((ch, i) => ({
   id: "t" + (i+1),
   letter: ch,
@@ -207,4 +207,6 @@ document.getElementById("sendChatBtn").onclick = () => {
 
 // Start
 renderBoard();
+
 renderRack();
+

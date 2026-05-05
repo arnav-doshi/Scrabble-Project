@@ -13,24 +13,34 @@
       <label>Username</label>
       <input id="username" placeholder="Enter your name" />
 
-      <label style="margin-top:14px;">Room Code (optional)</label>
+      <label style="margin-top:14px;">Room Code (leave empty to create new)</label>
       <input id="roomCode" placeholder="AB12" />
 
       <div class="row">
-        <button id="startBtn">Start Game</button>
+        <button id="createBtn">Create Game</button>
+        <button id="joinBtn">Join Game</button>
       </div>
 
-      <p class="hint">Frontend-only demo: this just opens the game UI.</p>
+      <p class="hint">Create a new game or join an existing one with a room code.</p>
       <p id="msg" class="msg"></p>
     </div>
   </div>
 
+  <!-- Socket.io Client Library -->
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  
+  <!-- Socket Service -->
+  <script src="socketService.js"></script>
+
   <script>
     const $ = (id) => document.getElementById(id);
+    
+    // Connect to server
+    socketService.connect();
 
-    $("startBtn").onclick = () => {
+    // Create new game
+    $("createBtn").onclick = async () => {
       const username = $("username").value.trim();
-      const roomCode = $("roomCode").value.trim().toUpperCase() || "AB12";
       $("msg").textContent = "";
 
       if (!username) {
@@ -38,9 +48,56 @@
         return;
       }
 
-      localStorage.setItem("scrabble_user", username);
-      localStorage.setItem("scrabble_room", roomCode);
-      window.location.href = "game.html";
+      try {
+        $("msg").textContent = "Creating game...";
+        $("createBtn").disabled = true;
+        
+        const response = await socketService.createGame(username);
+        
+        localStorage.setItem("scrabble_user", username);
+        localStorage.setItem("scrabble_room", response.roomCode);
+        localStorage.setItem("scrabble_game_id", response.gameId);
+        
+        window.location.href = "game.html";
+      } catch (error) {
+        console.error('Error creating game:', error);
+        $("msg").textContent = "Error creating game: " +  (error.message || 'Server error');
+        $("createBtn").disabled = false;
+      }
+    };
+
+    // Join existing game
+    $("joinBtn").onclick = async () => {
+      const username = $("username").value.trim();
+      const roomCode = $("roomCode").value.trim().toUpperCase();
+      $("msg").textContent = "";
+
+      if (!username) {
+        $("msg").textContent = "Please enter your username.";
+        return;
+      }
+
+      if (!roomCode) {
+        $("msg").textContent = "Please enter a room code to join.";
+        return;
+      }
+
+      try {
+        $("msg").textContent = "Joining game...";
+        $("joinBtn").disabled = true;
+        
+        const response = await socketService.joinGame(username, roomCode);
+        
+        localStorage.setItem("scrabble_user", username);
+        localStorage.setItem("scrabble_room", roomCode);
+        localStorage.setItem("scrabble_game_id", response.gameId);
+        
+        window.location.href = "game.html";
+      } catch (error) {
+        console.error('Error joining game:', error);
+        $("msg").textContent = "Error joining game: " + (error.message || 'Server error');
+        $("joinBtn").disabled = false;
+      }
     };
   </script>
 </body>
