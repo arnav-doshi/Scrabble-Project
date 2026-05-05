@@ -212,12 +212,12 @@ function setupSocketListeners() {
     renderBoard();
     
     if (data.lastMove) {
-      if (data.lastMove.player === user) {
-        setMsg(`Move submitted! +${data.lastMove.points} points`);
-      } else if (data.lastMove.action === 'pass') {
+      if (data.lastMove.action === 'pass') {
         setMsg(`${data.lastMove.player} passed`);
       } else if (data.lastMove.action === 'swap') {
         setMsg(`${data.lastMove.player} swapped tiles`);
+      } else if (data.lastMove.player === user) {
+        setMsg(`Move submitted! +${data.lastMove.points} points`);
       } else {
         setMsg(`${data.lastMove.player} scored ${data.lastMove.points} points`);
       }
