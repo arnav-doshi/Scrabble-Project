@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrabbleLive - Weekly Leaderboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="leaderboard-page">
+  <div class="leaderboard-shell">
+    <div class="leaderboard-header">
+      <div>
+        <h1 class="leaderboard-title">Weekly Leaderboard</h1>
+        <p class="leaderboard-subtitle">Top players from the last 7 days.</p>
+      </div>
+      <button id="playAgainBtn" class="secondary-btn">Play Again</button>
+    </div>
+
+    <div class="card leaderboard-card">
+      <div id="sessionBanner" class="leaderboard-banner" style="display:none;"></div>
+      <div id="loadingState" class="leaderboard-loading">Loading leaderboard...</div>
+      <table class="leaderboard-table" aria-label="Weekly leaderboard">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Total Points</th>
+            <th>Games Played</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody"></tbody>
+      </table>
+      <div id="emptyState" class="leaderboard-empty" style="display:none;">No finished games yet this week.</div>
+    </div>
+  </div>
+
+  <script src="socketService.js"></script>
+  <script>
+    const leaderboardBody = document.getElementById('leaderboardBody');
+    const loadingState = document.getElementById('loadingState');
+    const emptyState = document.getElementById('emptyState');
+    const sessionBanner = document.getElementById('sessionBanner');
+
+    const endedGame = sessionStorage.getItem('scrabble_ended_game');
+    if (endedGame) {
+      try {
+        const game = JSON.parse(endedGame);
+        const winnerText = Array.isArray(game.winner) ? game.winner.join(', ') : (game.winner || 'No winner');
+        sessionBanner.textContent = `Game ended. Winner: ${winnerText}`;
+        sessionBanner.style.display = 'block';
+      } catch (error) {
+        sessionBanner.style.display = 'none';
+      }
+    }
+
+    async function loadLeaderboard() {
+      loadingState.style.display = 'block';
+      emptyState.style.display = 'none';
+      leaderboardBody.innerHTML = '';
+
+      try {
+        const data = await socketService.fetchLeaderboard('week');
+        const rows = Array.isArray(data.leaderboard) ? data.leaderboard : [];
+
+        if (rows.length === 0) {
+          emptyState.style.display = 'block';
+        } else {
+          rows.forEach((entry) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${entry.rank}</td>
+              <td>${entry.username}</td>
+              <td>${entry.totalScore}</td>
+              <td>${entry.gamesPlayed}</td>
+            `;
+            leaderboardBody.appendChild(tr);
+          });
+        }
+      } catch (error) {
+        emptyState.textContent = `Unable to load leaderboard: ${error.message}`;
+        emptyState.style.display = 'block';
+      } finally {
+        loadingState.style.display = 'none';
+      }
+    }
+
+    document.getElementById('playAgainBtn').onclick = () => {
+      sessionStorage.removeItem('scrabble_ended_game');
+      sessionStorage.removeItem('scrabble_end_reason');
+      window.location.href = 'index.html';
+    };
+
+    loadLeaderboard();
+  </script>
+</body>
+</html>

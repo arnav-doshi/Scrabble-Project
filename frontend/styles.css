@@ -66,6 +66,14 @@ button{
   cursor:pointer;
 }
 
+button.secondary-btn{
+  background:#334155;
+}
+
+button.danger-btn{
+  background:#b91c1c;
+}
+
 .row{ display:flex; gap:10px; margin-top:12px; }
 
 .msg{
@@ -258,3 +266,108 @@ button{
 .final-scores{ margin-top:12px; text-align:left; }
 .final-scores .row{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #eee; }
 .final-scores .row:last-child{ border-bottom: none; }
+
+/* Leaderboard */
+.leaderboard-page{
+  min-height:100vh;
+  padding:32px 18px;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+.leaderboard-shell{
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.leaderboard-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:16px;
+  margin-bottom:18px;
+}
+
+.leaderboard-title{
+  margin:0;
+  font-size:42px;
+  line-height:1;
+}
+
+.leaderboard-subtitle{
+  margin:8px 0 0;
+  color:#475569;
+}
+
+.leaderboard-card{
+  padding:22px;
+}
+
+.leaderboard-banner{
+  background:#ecfeff;
+  border:1px solid #99f6e4;
+  color:#134e4a;
+  padding:12px 14px;
+  border-radius:12px;
+  margin-bottom:16px;
+}
+
+.leaderboard-table{
+  width:100%;
+  border-collapse:collapse;
+  overflow:hidden;
+}
+
+.leaderboard-table th,
+.leaderboard-table td{
+  text-align:left;
+  padding:12px 10px;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.leaderboard-table th{
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#64748b;
+}
+
+.leaderboard-table tbody tr:first-child td{
+  font-weight:800;
+}
+
+.leaderboard-table tbody tr:hover{
+  background:#f8fafc;
+}
+
+.leaderboard-empty{
+  padding:18px 10px;
+  color:#64748b;
+  text-align:center;
+}
+
+.leaderboard-footer{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:16px;
+}
+
+.leaderboard-loading{
+  color:#475569;
+  font-size:14px;
+  margin-top:8px;
+}
+
+@media (max-width: 760px){
+  .leaderboard-header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .leaderboard-title{
+    font-size:34px;
+  }
+
+  .leaderboard-card{
+    padding:16px;
+  }
+}
